@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tugas Pemrograman Web - Robin & Valliska</title>
+  <link href="bootstrap-5.3.0-alpha3-dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: rgb(11, 11, 40);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+    }
+    form {
+      background-color: rgb(73, 0, 0);
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 20px;
+      color: white;
+    }
+    h1 {
+      text-align: center;
+      margin-top: 0;
+      color: white;
+    }
+
+    h3{
+      text-align: center;
+      margin-top: 0;
+      color: white;
+    }
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    table th,
+    table td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+      color: white;
+    }
+
+    .btn{
+      color: black;
+      background-color: aliceblue;
+    }
+    
+  </style>
+</head>
+<body>
+  <div class="container mt-5">
+    <h1>Echo-Text</h1>
+    <form id="myForm" class="mt-4">
+      <div class="mb-3">
+        <label for="numberInput" class="form-label">Jumlah Echo :</label>
+        <input type="number" class="form-control" id="numberInput" required>
+      </div>
+      <div class="mb-3">
+        <label for="textInput" class="form-label">Teks :</label>
+        <input type="text" class="form-control" id="textInput" required>
+      </div>
+      <button type="submit" class="btn btn-outline-secondary d-inline-flex align-items-center">Submit</button>
+    </form>
+    <br><br><br><br>
+    <h3 id="resultTitle" class="mt-4" style="display: none;">Berikut merupakan hasil text-echoing :</h3>
+    <div id="result" class="mt-4"></div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $('#myForm').submit(function(event) {
+        event.preventDefault(); // Menghentikan pengiriman form default
+      
+        var numberInput = $('#numberInput').val();
+        var textInput = $('#textInput').val();
+      
+        $.ajax({
+          url: 'process.php',
+          type: 'POST',
+          data: { number: numberInput, text: textInput },
+          dataType: 'json',
+          success: function(data) {
+            $('#resultTitle').fadeIn('slow');
+            
+            var table = '<table class="table"><thead><tr><th>Echo</th><th>Text</th></tr></thead><tbody>';
+            for (var i = 0; i < data.length; i++) {
+              table += '<tr><td>' + i + '</td><td>' + data[i] + '</td></tr>';
+            }
+            table += '</tbody></table>';
+            $('#result').html(table).hide().fadeIn('slow');
+          },
+          error: function() {
+            alert('Oops! Something went wrong, please try again later');
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
